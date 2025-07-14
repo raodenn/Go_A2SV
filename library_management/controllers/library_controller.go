@@ -48,6 +48,8 @@ func StartConsole(lib *services.Library) {
 		}
 	}
 }
+
+// prints all current members to show user available id's
 func printMembers(members []*models.Member) {
 	if len(members) == 0 {
 		fmt.Println("No members found.")
@@ -58,6 +60,7 @@ func printMembers(members []*models.Member) {
 	}
 }
 
+// check if input is a valid input
 func checkIntInput(reader *bufio.Reader, prompt string) (int, error) {
 	fmt.Print(prompt)
 	input, _ := reader.ReadString('\n')
@@ -71,6 +74,7 @@ func checkIntInput(reader *bufio.Reader, prompt string) (int, error) {
 	return id, nil
 }
 
+// handles input for create book
 func handleAddBook(lib *services.Library, reader *bufio.Reader) {
 	fmt.Print("Enter book title: ")
 	title, _ := reader.ReadString('\n')
@@ -84,6 +88,8 @@ func handleAddBook(lib *services.Library, reader *bufio.Reader) {
 	fmt.Println("Book added successfully.")
 }
 
+// handles input for adding book
+
 func handleAddMember(lib *services.Library, reader *bufio.Reader) {
 	fmt.Print("Enter member name:")
 	name, _ := reader.ReadString('\n')
@@ -92,6 +98,9 @@ func handleAddMember(lib *services.Library, reader *bufio.Reader) {
 	lib.CreateMember(name)
 	fmt.Println("Member add successfully.")
 }
+
+// handles input for borrowing book
+
 func handleBorrowBook(lib *services.Library, reader *bufio.Reader) {
 	fmt.Println("Available Books:")
 	availableBooks := lib.ListAvailableBooks()
@@ -121,6 +130,8 @@ func handleBorrowBook(lib *services.Library, reader *bufio.Reader) {
 	}
 }
 
+// handles input for returning book
+
 func handleReturnBook(lib *services.Library, reader *bufio.Reader) {
 	fmt.Println("Borrowed Books:")
 	fmt.Println("Registered Members:")
@@ -149,6 +160,8 @@ func handleReturnBook(lib *services.Library, reader *bufio.Reader) {
 	}
 }
 
+// handles input for printing books to console
+
 func printBooks(books []*models.Book) {
 	if len(books) == 0 {
 		fmt.Println("No books found.")
@@ -165,6 +178,9 @@ func handleListAvailableBooks(lib *services.Library) {
 	printBooks(books)
 
 }
+
+// handles input for listing borrowed books
+
 func handleListBorrowedBooks(lib *services.Library, reader *bufio.Reader) {
 	fmt.Println("Registered Members:")
 	members := lib.ListMembers()

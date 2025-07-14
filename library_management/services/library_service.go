@@ -20,6 +20,7 @@ type Library struct {
 	NextMemberID int
 }
 
+// method to initialize library
 func NewLibrary() *Library {
 	lib := &Library{
 		Books:        make(map[int]*models.Book),
@@ -45,15 +46,19 @@ func NewLibrary() *Library {
 	return lib
 }
 
+// adds book to library
 func (lib *Library) AddBook(book *models.Book) {
 
 	lib.Books[book.Id] = book
 }
 
+// removes books from library
 func (lib *Library) RemoveBook(bookID int) {
 	delete(lib.Books, bookID)
 }
 
+// borrow book for a member
+// checks if both book and member exist returns error if they don't
 func (lib *Library) BorrowBook(bookID int, memberID int) error {
 	book, err := lib.BookExistsAndAvailable(bookID)
 	if err != nil {
@@ -70,6 +75,8 @@ func (lib *Library) BorrowBook(bookID int, memberID int) error {
 	return nil
 }
 
+// return book for a member
+// checks if book is borrowed and if member exists returns error if they don't
 func (lib *Library) ReturnBook(bookID int, memberID int) error {
 	book, err := lib.BookExistsAndBorrowed(bookID)
 
@@ -87,6 +94,7 @@ func (lib *Library) ReturnBook(bookID int, memberID int) error {
 	return nil
 }
 
+// returns a slice of all available books
 func (lib *Library) ListAvailableBooks() []*models.Book {
 	var availableBooks []*models.Book
 	for _, book := range lib.Books {
@@ -97,6 +105,7 @@ func (lib *Library) ListAvailableBooks() []*models.Book {
 	return availableBooks
 }
 
+// returns a slice of all the borrowed books for a member with id
 func (lib *Library) ListBorrowedBooks(memberID int) ([]*models.Book, error) {
 	var borrowedBooks []*models.Book
 	member, err := lib.MemberExists(memberID)
