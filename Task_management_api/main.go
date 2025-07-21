@@ -1,9 +1,13 @@
 package main
 
-import "Task_management_api/router"
+import (
+	"Task_management_api/data"
+	"Task_management_api/router"
+)
 
 func main() {
-	router := router.SetupRouter()
+	data.ConnectToMongoDB()
 
-	router.Run(":8080")
+	r := router.SetupRouter()
+	r.Run(":8080")
 }
