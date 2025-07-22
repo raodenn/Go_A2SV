@@ -10,6 +10,8 @@ import (
 )
 
 var TaskCollections *mongo.Collection
+var MongoClient *mongo.Client
+var UserCollection *mongo.Collection
 
 func ConnectToMongoDB() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -26,7 +28,9 @@ func ConnectToMongoDB() {
 		panic(fmt.Sprintf("MongoDB ping failed: %v", err))
 	}
 
+	MongoClient = client
 	TaskCollections = client.Database("taskdb").Collection("tasks")
+	UserCollection = client.Database("taskdb").Collection("users")
 
 	fmt.Println("Connected to MongoDB and selected collection")
 }

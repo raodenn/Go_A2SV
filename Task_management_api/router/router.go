@@ -2,18 +2,25 @@ package router
 
 import (
 	"Task_management_api/controllers"
+	"Task_management_api/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
+	router.POST("/users/register", controllers.RegisterUser)
+	router.POST("/users/login", controllers.Login)
 
-	router.GET("/tasks", controllers.GetTasks)
-	router.GET("/tasks/:id", controllers.GetTaskById)
-	router.PUT("/tasks/:id", controllers.UpdateTask)
-	router.POST("/tasks", controllers.CreateTask)
-	router.DELETE("/tasks/:id", controllers.DeleteTask)
+	authorized := router.Group("/tasks")
+	authorized.Use(middleware.Authenticate())
+	{
+		authorized.GET("/", controllers.GetTasks)
+		authorized.GET("/:id", controllers.GetTaskById)
+		authorized.PUT("/:id", controllers.UpdateTask)
+		authorized.POST("/", middleware.AuthorizeRoles("ADMIN", "USER"), controllers.CreateTask)
+		authorized.DELETE("/:id", middleware.AuthorizeRoles("ADMIN"), controllers.DeleteTask)
 
+	}
 	return router
 }

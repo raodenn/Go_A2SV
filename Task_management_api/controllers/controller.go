@@ -97,3 +97,37 @@ func DeleteTask(c *gin.Context) {
 	}
 	c.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
 }
+
+func RegisterUser(c *gin.Context) {
+	var user models.User
+
+	err := c.BindJSON(&user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = data.CreateUser(&user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+
+	}
+	c.JSON(http.StatusOK, "Registered successfully")
+}
+
+func Login(c *gin.Context) {
+	var user models.User
+	err := c.BindJSON(&user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	foundUser, err := data.Login(user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, foundUser)
+}
